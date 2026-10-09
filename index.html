@@ -179,7 +179,7 @@ const fFecha = d => { d = new Date(d); return `${p2(d.getDate())}/${p2(d.getMont
 const fHora = d => { d = new Date(d); const h = d.getHours(); return `${h % 12 || 12}:${p2(d.getMinutes())} ${h < 12 ? 'AM' : 'PM'}`; };
 const fDiaISO = d => { d = new Date(d); return `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`; };
 const azar = n => Array.from(crypto.getRandomValues(new Uint8Array(n)), b => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[b % 32]).join('');
-const apiLista = () => /^https:\/\/script\.google\.com\//.test(https://script.google.com/macros/s/AKfycbzGdWRk-06_mqz2bZN8DGn66wMIjXtfwP3vtzKRnYoTVNPwxcIsFqoHpNYBQM5s26_u_A/exec);
+const apiLista = () => /^https:\/\/script\.google\.com\//.test(CONFIG.API_URL);
 
 const LS = {
   get(k, d) { try { const v = localStorage.getItem('rg.' + k); return v ? JSON.parse(v) : d; } catch { return d; } },
