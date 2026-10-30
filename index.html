@@ -185,6 +185,47 @@ dialog input{margin-bottom:16px}
   padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;max-width:88vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.ver{opacity:1}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* PC: pantalla completa (desde 1024 px) */
+@media (min-width:1024px){
+  #app{max-width:none;padding:0 28px 120px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:16px;align-content:start}
+  #app>*{grid-column:1/-1}
+  #app>.item,#app>.ronda-h{grid-column:auto}
+  .barra,.franja{margin-left:-28px;margin-right:-28px;padding-left:28px;padding-right:28px}
+  .pie{padding:22px 28px 16px}
+  .pie>div{max-width:520px;margin:0 0 0 auto}
+  .btn:hover:not([disabled]){filter:brightness(1.08)}
+  .btn.sec:hover:not([disabled]),.item>.cuerpo:hover,.ronda-h:hover{background:var(--vino-suave)}
+  #listaPend,#listaReg,#regs{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));column-gap:16px}
+  #listaPend>.item,#listaReg>.item,#regs>.item{margin-bottom:10px}
+  #listaPend>.vacio,#regs>.vacio{grid-column:1/-1}
+  #app>.busca{max-width:560px}
+  #app>#bNuevo,#app>.plg,#app>#bDesc{max-width:420px}
+  /* Inicio: sede y técnico a la izquierda, acciones a la derecha */
+  #app[data-v=inicio]{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:28px}
+  #app[data-v=inicio]>.marca{padding:24px 0}
+  #app[data-v=inicio]>.tarjeta{grid-column:1;grid-row:3/span 4;margin:0}
+  #app[data-v=inicio]>#bRonda,#app[data-v=inicio]>.menu,#app[data-v=inicio]>#bInst,#app[data-v=inicio]>.nota{grid-column:2}
+  #app[data-v=inicio]>.menu{margin-top:12px}
+  #app[data-v=inicio]>.nota:last-child{grid-column:1/-1}
+  #app[data-v=inicio] #bRonda{min-height:72px;font-size:18px}
+  /* Servicio y finalizar: datos a la izquierda, firma a la derecha */
+  #app[data-v=servicio],#app[data-v=finalizar]{grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:24px}
+  #app[data-v=servicio]>*,#app[data-v=finalizar]>*{grid-column:1}
+  #app[data-v=servicio]>.barra,#app[data-v=finalizar]>.barra,#app[data-v=finalizar]>.esp{grid-column:1/-1}
+  #app[data-v=servicio]>.tarjeta:has(.firma-caja){grid-column:2;grid-row:2/span 6;margin-top:14px}
+  #app[data-v=finalizar]>.tarjeta:has(.firma-caja){grid-column:2;grid-row:3/span 4}
+  /* Detalle: hojas del reporte lado a lado */
+  #app[data-v=detalle]>.tarjeta{grid-column:span 2}
+  #app[data-v=detalle]>.fila{grid-column:span 1;flex-direction:column;gap:10px}
+  #hojas{display:grid;grid-template-columns:repeat(auto-fill,minmax(520px,1fr));gap:14px;align-items:start}
+  #hojas>.hoja{margin:0}
+  /* Historial y ajustes */
+  #app>.pestanas{max-width:480px}
+  #app[data-v=ajustes]{grid-template-columns:repeat(4,minmax(0,1fr))}
+  #app[data-v=ajustes]>.tarjeta{grid-column:span 2}
+  #app[data-v=ajustes]>.btn{max-width:420px}
+}
 </style>
 </head>
 <body>
@@ -369,6 +410,7 @@ function pintar() {
   if (alSalir) { try { alSalir(); } catch { } alSalir = null; }
   $$('.capa-firma').forEach(c => c.remove());
   app.innerHTML = '';
+  app.dataset.v = vistas[actual.v] ? actual.v : 'inicio';   // para acomodar la vista en PC
   (vistas[actual.v] || vistas.inicio)(actual.p || {});
   window.scrollTo(0, 0);
 }
