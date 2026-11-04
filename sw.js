@@ -1,7 +1,7 @@
 /* Service worker — permite abrir la app sin datos ni WiFi.
    Cada vez que publiques cambios en index.html, sube el número de VERSION
    para que los teléfonos descarguen la versión nueva. */
-const VERSION = 'ronda-gases-v5';
+const VERSION = 'ronda-gases-v6';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
 
 self.addEventListener('install', e => {

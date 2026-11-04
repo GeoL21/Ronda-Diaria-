@@ -37,7 +37,7 @@ svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke
 .barra .ico{background:rgba(255,255,255,.15);border:0;color:#fff;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;flex:none}
 .av{display:flex;justify-content:space-between;font-size:13px;font-weight:700;margin:12px 0 6px;font-variant-numeric:tabular-nums}
 .bar{height:8px;border-radius:9px;background:rgba(255,255,255,.22);overflow:hidden}
-.bar i{display:block;height:100%;background:#fff;border-radius:9px;transition:width .3s}
+.bar i{display:block;height:100%;background:#fff;border-radius:9px;transition:width 300ms linear}
 
 /* Franja de conexión */
 .franja{display:flex;align-items:center;gap:8px;margin:0 -16px 14px;padding:8px 16px;font-size:13px;font-weight:600;background:var(--ok-suave);color:var(--ok);min-height:38px}
@@ -70,8 +70,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--vino);box-shadow:0 0 
 .mayus::placeholder{text-transform:none;font-weight:500}
 
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:56px;border-radius:14px;border:0;
-  background:var(--vino);color:#fff;font-weight:800;font-size:16px;padding:10px 16px;text-align:center;transition:transform .1s,background .15s}
-.btn:active{background:var(--vino-osc);transform:scale(.985)}
+  background:var(--vino);color:#fff;font-weight:800;font-size:16px;padding:10px 16px;text-align:center;transition:transform 150ms var(--ease-out)}
+.btn:active{background:var(--vino-osc);transform:scale(.98)}
 .btn[disabled]{opacity:.45}
 .btn.sec{background:#fff;color:var(--vino);border:1.5px solid var(--vino-linea)}
 .btn.sec:active{background:var(--vino-suave)}
@@ -108,7 +108,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--vino);box-shadow:0 0 
 .busca svg.i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--suave)}
 .busca input{padding-left:44px;font-weight:500}
 .plg{width:100%;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--linea);border-radius:14px;padding:0 14px;min-height:54px;font-weight:700;font-size:15px;margin-top:8px;text-align:left}
-.plg .chev{margin-left:auto;transition:transform .2s}
+.plg .chev{margin-left:auto;transition:transform 200ms var(--ease-out)}
 .plg[aria-expanded=true] .chev{transform:rotate(180deg)}
 
 .reloj{display:flex;gap:8px;margin:14px 0 12px;font-variant-numeric:tabular-nums}
@@ -182,8 +182,8 @@ dialog::backdrop{background:rgba(36,26,30,.5)}
 dialog p{margin-bottom:16px;font-size:16px}
 dialog input{margin-bottom:16px}
 #toast{position:fixed;left:50%;top:calc(76px + env(safe-area-inset-top));transform:translateX(-50%);z-index:50;background:#241a1e;color:#fff;
-  padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;max-width:88vw;text-align:center;opacity:0;pointer-events:none;transition:opacity .2s}
-#toast.ver{opacity:1}
+  padding:12px 18px;border-radius:12px;font-size:14px;font-weight:600;max-width:88vw;text-align:center;opacity:0;pointer-events:none;transition:opacity 150ms var(--ease-out)}
+#toast.ver{opacity:1;transition-duration:200ms}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* PC: pantalla completa (desde 1024 px) */
@@ -226,6 +226,14 @@ dialog input{margin-bottom:16px}
   #app[data-v=ajustes]>.tarjeta{grid-column:span 2}
   #app[data-v=ajustes]>.btn{max-width:420px}
 }
+
+/* ---------- Movimiento (skill motion) ---------- */
+/* Botones: se encogen un poco al tocarlos (150 ms) para que se note la respuesta */
+:root{--ease-out:cubic-bezier(0.23,1,0.32,1)}
+button,.btn{transition:transform 150ms var(--ease-out)}
+button:active:not(:disabled),.btn:active{transform:scale(.98)}
+/* Con "reducir movimiento" activado en el teléfono: sin escalas */
+@media (prefers-reduced-motion:reduce){button:active:not(:disabled),.btn:active{transform:none!important}}
 </style>
 </head>
 <body>
