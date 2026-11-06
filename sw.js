@@ -1,7 +1,7 @@
 /* Service worker — permite abrir la app sin datos ni WiFi.
    Cada vez que publiques cambios en index.html, sube el número de VERSION
    para que los teléfonos descarguen la versión nueva. */
-const VERSION = 'ronda-gases-v7';
+const VERSION = 'ronda-gases-v8';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
@@ -10,8 +10,8 @@ self.addEventListener('install', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil(
-    caches.keys()
-      .then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k))))
+    /* Solo borra cachés de esta app: el sitio geol21.github.io lo comparten varias PWA */ caches.keys()
+      .then(ks => Promise.all(ks.filter(k => k.indexOf('ronda-gases-') === 0 && k !== VERSION).map(k => caches.delete(k))))
       .then(() => self.clients.claim())
   );
 });
