@@ -1,11 +1,11 @@
 /* Service worker — permite abrir la app sin datos ni WiFi.
    Cada vez que publiques cambios en index.html, sube el número de VERSION
    para que los teléfonos descarguen la versión nueva. */
-const VERSION = 'ronda-gases-v15';
+const VERSION = 'ronda-gases-v16';
 const ARCHIVOS = ['./', 'index.html', 'manifest.json', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(VERSION).then(c => c.addAll(ARCHIVOS.map(u => new Request(u, { cache: 'reload' })))).then(() => self.skipWaiting()));
 });
 
 self.addEventListener('activate', e => {
@@ -23,10 +23,12 @@ self.addEventListener('fetch', e => {
 
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
-    const guardado = await cache.match(req, { ignoreSearch: true }) ||
-                     (req.mode === 'navigate' ? await cache.match('index.html') : null);
-    // Responde de inmediato con lo guardado y actualiza en segundo plano
-    const red = fetch(req).then(r => { if (r && r.ok) cache.put(req, r.clone()); return r; }).catch(() => null);
-    return guardado || (await red) || new Response('Sin conexión', { status: 503 });
+    /* Con internet: primero la red (abre siempre la última versión). Sin señal o lenta: lo guardado. */
+    try {
+      const r = await Promise.race([fetch(req, { cache: 'no-cache' }), new Promise((_, no) => setTimeout(() => no(new Error('lento')), 3500))]);
+      if (r && r.ok) { cache.put(req, r.clone()); return r; }
+    } catch (err) { }
+    return (await cache.match(req, { ignoreSearch: true })) || (req.mode === 'navigate' ? await cache.match('index.html') : null) ||
+      new Response('Sin conexión', { status: 503 });
   })());
 });
